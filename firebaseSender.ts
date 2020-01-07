@@ -50,5 +50,29 @@ function writeUserData(userId, inptName, inptAge, inptAdress) {
     
   }
 
+  function writeNewPost(uid, inptName, inptAge, inptAdress) {
+    // A post entry.
+    var postData = {
+        name: inptName,
+        age: inptAge,
+        adress : inptAdress
+    };
+  
+    // Get a key for a new Post.
+    var newPostKey = firebase.database().ref().child('posts').push().key;
+  
+    // Write the new post's data simultaneously in the posts list and the user's post list.
+    var updates = {};
+    updates['/posts/' + newPostKey] = postData;
+    updates['/user-posts/' + uid + '/' + newPostKey] = postData;
+  
+    return firebase.database().ref().update(updates);
+  }
+
+  function deleteUser(uid){
+    firebase.database().ref('users/' + uid).remove()
+  }
+  
+
   //writeUserData("testing","roger cordou","100","3 rue de la boustifaille")
   //readUserData("testing")
